@@ -15,7 +15,7 @@ DEG_TO_RAD = pi/180
 RAD_TO_DEG = 180/pi
 
 # Default number of rendering threads to spawn, should be roughly equal to number of CPU cores available
-NUM_THREADS = 4
+NUM_THREADS = 8
 
 
 def minmax (a,b,c):
@@ -61,6 +61,7 @@ class RenderThread:
         self.m = mapnik.Map(256, 256)
         self.printLock = printLock
         # Load style XML
+        mapnik.logger.set_severity(mapnik.severity_type.None)
         mapnik.load_map(self.m, mapfile, True)
         # Obtain <Map> projection
         self.prj = mapnik.Projection(self.m.srs)
@@ -95,6 +96,7 @@ class RenderThread:
 
         # Render image with default Agg renderer
         im = mapnik.Image(render_size, render_size)
+        mapnik.logger.set_severity(mapnik.severity_type.None)
         mapnik.render(self.m, im)
         im.save(tile_uri, 'png256')
 
@@ -191,11 +193,11 @@ def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", 
 
 
 if __name__ == "__main__":
-    home = "/home/justin/GIS/mapnik"
+    home = "/home/justin/GIS/tracklas-maps"
     try:
         mapfile = os.environ['MAPNIK_MAP_FILE']
     except KeyError:
-        mapfile = home + "/tracklas-vic.xml"
+        mapfile = home + "/project.xml"
     try:
         tile_dir = os.environ['MAPNIK_TILE_DIR']
     except KeyError:

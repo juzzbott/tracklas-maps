@@ -24,7 +24,7 @@ if __name__ == "__main__":
     try:
         mapfile = os.environ['MAPNIK_MAP_FILE']
     except KeyError:
-        mapfile = "tracklas-vic.xml"
+        mapfile = "project.xml"
     
     map_uri = "image.png"
 
